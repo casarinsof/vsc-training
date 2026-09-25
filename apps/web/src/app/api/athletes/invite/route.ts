@@ -78,7 +78,10 @@ export async function POST(request: Request) {
 
   if (coachProfileError) {
     return NextResponse.json(
-      { ok: false, error: "Profilo coach non disponibile" },
+      {
+        ok: false,
+        error: `Profilo coach non disponibile (${coachProfileError.code ?? "no-code"}) ${coachProfileError.message}`
+      },
       { status: 500 }
     );
   }
@@ -120,7 +123,10 @@ export async function POST(request: Request) {
 
       if (!invite) {
         return NextResponse.json(
-          { ok: false, error: "Invito non salvabile" },
+          {
+            ok: false,
+            error: `Invito non salvabile (${inviteError?.code ?? "no-code"}) ${inviteError?.message ?? "errore sconosciuto"}`
+          },
           { status: 400 }
         );
       }
