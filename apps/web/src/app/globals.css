@@ -151,7 +151,11 @@ main{min-width:0;position:relative}.topbar{height:72px;border-bottom:1px solid v
 .invite-list li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--border)}
 .invite-list li strong{display:block;font-size:12px}
 .invite-list li small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+.invite-actions{display:flex;align-items:center;gap:8px}
 .invite-status{text-transform:uppercase;letter-spacing:.7px;font-size:9px;font-weight:800;border-radius:999px;padding:5px 9px;border:1px solid var(--border);color:var(--muted)}
 .invite-status.pending{color:#ffbc42;border-color:rgba(255,188,66,.4);background:rgba(255,188,66,.12)}
 .invite-status.accepted{color:#63e798;border-color:rgba(99,231,152,.4);background:rgba(99,231,152,.12)}
 .invite-status.revoked{color:#ff8f8f;border-color:rgba(255,143,143,.45);background:rgba(255,143,143,.1)}
+.invite-delete{height:28px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);display:inline-flex;align-items:center;gap:4px;padding:0 8px;font-size:10px;font-weight:700;cursor:pointer}
+.invite-delete:hover:not(:disabled){color:#ff8f8f;border-color:#ff8f8f}
+.invite-delete:disabled{opacity:.6;cursor:not-allowed}

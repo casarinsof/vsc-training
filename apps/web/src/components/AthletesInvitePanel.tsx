@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MailPlus } from "lucide-react";
+import { MailPlus, Trash2 } from "lucide-react";
 
 export interface AthleteInviteItem {
   id: string;
@@ -18,9 +18,16 @@ interface AthletesInvitePanelProps {
 export function AthletesInvitePanel({ initialInvites }: AthletesInvitePanelProps) {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
-  const [invites, setInvites] = useState(initialInvites);
+  const [invites, setInvites] = useState(() => {
+    const uniqueById = new Map<string, AthleteInviteItem>();
+    for (const invite of initialInvites) {
+      uniqueById.set(invite.id, invite);
+    }
+    return Array.from(uniqueById.values());
+  });
   const [status, setStatus] = useState<"idle" | "sending" | "error" | "ok">("idle");
   const [message, setMessage] = useState("");
+  const [removingInviteId, setRemovingInviteId] = useState<string | null>(null);
 
   async function handleInvite(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -38,6 +45,7 @@ export function AthletesInvitePanel({ initialInvites }: AthletesInvitePanelProps
         ok?: boolean;
         error?: string;
         invite?: AthleteInviteItem;
+        warning?: string;
       };
 
       if (!response.ok || !body.ok || !body.invite) {
@@ -45,15 +53,47 @@ export function AthletesInvitePanel({ initialInvites }: AthletesInvitePanelProps
       }
 
       const createdInvite = body.invite;
-      setInvites((current) => [createdInvite, ...current]);
+      setInvites((current) => {
+        const next = current.filter((invite) => invite.id !== createdInvite.id);
+        return [createdInvite, ...next];
+      });
       setEmail("");
       setFullName("");
       setStatus("ok");
-      setMessage("Invito inviato. L’atleta riceverà un link di accesso.");
+      setMessage(
+        body.warning
+          ? "Invito presente: account già esistente, link non reinviato automaticamente."
+          : "Invito inviato. L’atleta riceverà un link di accesso."
+      );
       window.setTimeout(() => setStatus("idle"), 2200);
     } catch (submitError) {
       setStatus("error");
       setMessage(submitError instanceof Error ? submitError.message : "Errore invio invito");
+    }
+  }
+
+  async function handleDeleteInvite(inviteId: string) {
+    setRemovingInviteId(inviteId);
+    setStatus("idle");
+    setMessage("");
+
+    try {
+      const response = await fetch(`/api/athletes/invite/${inviteId}`, { method: "DELETE" });
+      const body = (await response.json()) as { ok?: boolean; error?: string };
+
+      if (!response.ok || !body.ok) {
+        throw new Error(body.error ?? "Revoca invito non riuscita");
+      }
+
+      setInvites((current) => current.filter((invite) => invite.id !== inviteId));
+      setStatus("ok");
+      setMessage("Invito pending eliminato.");
+      window.setTimeout(() => setStatus("idle"), 2200);
+    } catch (deleteError) {
+      setStatus("error");
+      setMessage(deleteError instanceof Error ? deleteError.message : "Errore revoca invito");
+    } finally {
+      setRemovingInviteId(null);
     }
   }
 
@@ -110,7 +150,21 @@ export function AthletesInvitePanel({ initialInvites }: AthletesInvitePanelProps
                   <strong>{invite.athlete_name || invite.athlete_email}</strong>
                   {invite.athlete_name ? <small>{invite.athlete_email}</small> : null}
                 </div>
-                <span className={`invite-status ${invite.status}`}>{invite.status}</span>
+                <div className="invite-actions">
+                  <span className={`invite-status ${invite.status}`}>{invite.status}</span>
+                  {invite.status === "pending" ? (
+                    <button
+                      type="button"
+                      className="invite-delete"
+                      onClick={() => handleDeleteInvite(invite.id)}
+                      disabled={removingInviteId === invite.id}
+                      aria-label="Elimina invito pending"
+                    >
+                      <Trash2 size={13} />
+                      {removingInviteId === invite.id ? "Elimino..." : "Elimina"}
+                    </button>
+                  ) : null}
+                </div>
               </li>
             ))}
           </ul>
