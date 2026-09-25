@@ -1,0 +1,2 @@
+import { SectionScreen } from "../../components/SectionScreen";
+export default function ProfileScreen() { return <SectionScreen title="Profilo" subtitle="Obiettivi, preferenze e dati del tuo account." icon="person-circle" />; }

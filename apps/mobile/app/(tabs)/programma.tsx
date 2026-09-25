@@ -1,0 +1,2 @@
+import { SectionScreen } from "../../components/SectionScreen";
+export default function ProgramScreen() { return <SectionScreen title="Il tuo programma" subtitle="Sessioni, settimane e indicazioni del coach." icon="calendar" />; }

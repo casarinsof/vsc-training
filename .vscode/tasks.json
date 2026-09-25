@@ -1,0 +1,53 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "VSC Training: Web Coach",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev:web"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "VSC Training: App Atleta",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev:mobile"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "VSC Training: Anteprima Web",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev:web"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "VSC Training: Web Coach Preview",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev:web"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}

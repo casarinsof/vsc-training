@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "VSC Training",
+    "slug": "vsc-training",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "scheme": "vsctraining",
+    "plugins": ["expo-router"],
+    "ios": { "supportsTablet": true, "bundleIdentifier": "it.vsctraining.app" },
+    "android": { "package": "it.vsctraining.app", "adaptiveIcon": { "backgroundColor": "#080b09" } },
+    "experiments": { "typedRoutes": true }
+  }
+}

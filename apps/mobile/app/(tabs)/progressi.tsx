@@ -1,0 +1,2 @@
+import { SectionScreen } from "../../components/SectionScreen";
+export default function ProgressScreen() { return <SectionScreen title="Progressi" subtitle="Carichi, record, misure e continuità nel tempo." icon="trending-up" />; }

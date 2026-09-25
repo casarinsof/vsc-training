@@ -1,0 +1,2 @@
+import { SectionScreen } from "../../components/SectionScreen";
+export default function MessageScreen() { return <SectionScreen title="Messaggi" subtitle="Feedback e conversazioni dirette con il tuo coach." icon="chatbubbles" />; }
