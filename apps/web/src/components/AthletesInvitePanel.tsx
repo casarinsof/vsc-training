@@ -62,7 +62,7 @@ export function AthletesInvitePanel({ initialInvites }: AthletesInvitePanelProps
       setStatus("ok");
       setMessage(
         body.warning
-          ? "Invito presente: account già esistente, link non reinviato automaticamente."
+          ? body.warning
           : "Invito inviato. L’atleta riceverà un link di accesso."
       );
       window.setTimeout(() => setStatus("idle"), 2200);

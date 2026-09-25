@@ -169,7 +169,38 @@ export async function POST(request: Request) {
       message.includes("already") || message.includes("registered") || message.includes("exists");
 
     if (alreadyKnownUser) {
-      return NextResponse.json({ ok: true, invite, warning: authError.message }, { status: 200 });
+      const { error: resendError } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: redirectTo,
+          shouldCreateUser: true,
+          data: {
+            role: "atleta",
+            invited_by_coach_id: user.id,
+            invite_id: invite.id,
+            full_name: fullName || null
+          }
+        }
+      });
+
+      if (resendError) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error: `Invito pending esistente ma reinvio fallito: ${resendError.message}`
+          },
+          { status: 400 }
+        );
+      }
+
+      return NextResponse.json(
+        {
+          ok: true,
+          invite,
+          warning: "Invito già pending: link reinviato via email."
+        },
+        { status: 200 }
+      );
     }
 
     if (createdInvite) {
