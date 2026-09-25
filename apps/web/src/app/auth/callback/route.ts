@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const tokenHash = url.searchParams.get("token_hash");
   const type = url.searchParams.get("type") as EmailOtpType | null;
   const nextParam = url.searchParams.get("next") ?? "/programmi";
-  const nextPath = nextParam.startsWith("/") ? nextParam : "/programmi";
+  let nextPath = nextParam.startsWith("/") ? nextParam : "/programmi";
 
   const supabase = await getServerSupabaseClient();
   if (supabase) {
@@ -33,6 +33,7 @@ export async function GET(request: Request) {
 
       const coachId = metadata?.invited_by_coach_id?.trim();
       if (coachId) {
+        nextPath = "/athlete-setup";
         const profileName = metadata?.full_name?.trim() || user.email?.split("@")[0] || "Atleta";
 
         await admin.from("profiles").upsert(

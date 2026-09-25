@@ -151,7 +151,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const redirectTo = `${appOrigin}/auth/callback?next=/atleti`;
+  const redirectTo = `${appOrigin}/auth/callback?next=/athlete-setup`;
 
   const { error: authError } = await admin.auth.admin.inviteUserByEmail(email, {
     redirectTo,
